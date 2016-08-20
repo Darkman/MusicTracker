@@ -77,11 +77,18 @@ class MusicJSON:
         return dict1
 
     def _read_json(self):
-        with open(self.filepath, mode='r', encoding='utf-8') as infile:
-            try:
-                return json.load(infile)
-            except ValueError:
-                return dict()
+        """
+        Read existing favorited or deleted music,
+        otherwise return an empty dict.
+        """
+        try:
+            with open(self.filepath, mode='r', encoding='utf-8') as infile:
+                try:
+                    return json.load(infile)
+                except ValueError:
+                    return dict()
+        except FileNotFoundError:
+            return dict()
 
 
 class Controls:

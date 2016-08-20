@@ -23,4 +23,9 @@ On Exit:
 not running
 
 Use the AutoHotkey program to setup keyboard shortcuts to run the python script with the wanted parameters.
+Example AutoHotkey config:
+SetWorkingDir, E:\Users\Test\Projects\MusicTracker\
+^!f:: Run E:\Users\Test\Virtualenvs\MusicTracker\Scripts\pythonw.exe E:\Users\Test\Projects\MusicTracker\music_tracking.py -f
+
+Tip: run pythonw.exe with AutoHotkey to not show a prompt on run
 
