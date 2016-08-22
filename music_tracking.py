@@ -54,6 +54,13 @@ def enumerate_album(song):
     return songs
 
 
+def delete_music(paths):
+    for path in paths:
+        path = Path(path)
+        if path.exists() and path.is_file():
+            path.unlink()
+
+
 class MusicJSON:
     def __init__(self, filepath):
         self.filepath = filepath
@@ -66,6 +73,16 @@ class MusicJSON:
     def update(self, song):
         song_dict = {'Artist': {song.artist: {song.album: {song.title: song.path}}}}
         self.music = self._dict_update(self.music, song_dict)
+
+    def get_all_paths(self):
+        paths = []
+        if 'Artist' not in self.music:
+            return paths
+        for artist in self.music['Artist']:
+            for album in self.music['Artist'][artist]:
+                for song, path in self.music['Artist'][artist][album].items():
+                    paths.append(path)
+        return paths
 
     def _dict_update(self, dict1, dict2):
         for key, value in dict2.items():
@@ -116,6 +133,12 @@ class Controls:
         self.deleted_music.save()
 
 
+def print_test(controls):
+    import pprint
+    pprint.pprint(controls.favorited_music.get_all_paths(), width=500)
+    pprint.pprint(controls.deleted_music.get_all_paths(), width=500)
+
+
 def main():
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
@@ -130,12 +153,16 @@ def main():
 
     if args.fav_song:
         controls.favorite_song()
+        print_test(controls)
     elif args.fav_album:
         controls.favorite_album()
+        print_test(controls)
     elif args.delete_song:
         controls.delete_song()
+        print_test(controls)
     elif args.delete_album:
         controls.delete_album()
+        print_test(controls)
 
 if __name__ == '__main__':
     main()
